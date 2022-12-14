@@ -1,50 +1,87 @@
-//home
-var coffee= document.getElementById('main');
-var foot= document.getElementById('footer');
-var callbtn= document.getElementById('call');
-var emailbtn= document.getElementById('email1');
-var bx= document.getElementById('bc');
-coffee.addEventListener('mouseover', function (e){
-  coffee.style.color= 'brown';
-  coffee.style.textAlign= 'right';
-  coffee.style.verticalAlign= 'top';
-  coffee.style.fontSize= '205px';
-  bx.style.backgroundColor= 'white';
-event.preventDefault();
-});
-coffee.addEventListener('mouseout', function (event){
-  coffee.style.color= 'white';
-  coffee.style.textAlign= 'left';
-  coffee.style.verticalAlign= 'bottom';
-  coffee.style.fontSize= '200px';
-  bx.style.backgroundColor= 'rgb(180, 78, 5)';
-});
-foot.addEventListener('mouseover', function (e){
-callbtn.style.backgroundColor= 'blue';
-emailbtn.style.backgroundColor= 'blue';
-callbtn.style.transform= 'scale(1.1)';
-emailbtn.style.transform= 'scale(1.1)';
-e.preventDefault();
-});
-foot.addEventListener('mouseout', function (e){
-  callbtn.style.backgroundColor= 'purple';
-  emailbtn.style.backgroundColor= 'green';
-  callbtn.style.borderRadius= '20px';
-  emailbtn.style.borderRadius= '20px';
- e.preventDefault();
-  }); 
+window.onload= function (){
 
-  //login
-  var lg= document.getElementById('haed');
-  var email1= document.getElementById('email');
-  var password= document.getElementById('pass');
-  var submit= document.getElementById('button');
-  email1.addEventListener('mouseover', function (e){
-lg.style.color= 'red';
-  });
-  submit.addEventListener('click', function (e){
-var value= password.target.value;
-if(value<6){
-  alert('passzord too  short');
+var music= document.querySelector('.audio');
+var music_duration= document.querySelector('.meantime');
+var current_time= document.querySelector('.prevtime'); 
+var disk= document.querySelector('.disk');
+var prev= document.querySelector('.prev');
+var next= document.querySelector('.next');
+var pause_icon= document.querySelector('.pause_icon');
+var pause= document.querySelector('.pause');
+var songname= document.querySelector('.trackname');
+var range= document.querySelector('.range');
+const marquee= document.querySelector('.marquee')
+var image=  document.querySelector('.image');
+pause.onclick= function (e){
+disk.classList.toggle('rotating');
+pause_icon.classList.toggle('play_icon');
+songname.classList.toggle('trackname_paused');
+if(pause_icon.className.includes('play_icon')){
+    music.pause();
+}else{
+    music.play();
 }
-  });
+}
+var i=2;
+async function setMusic(musicindex){
+music.src= songs[musicindex].path;
+image.src= songs[musicindex].src;
+songname.innerHTML= songs[musicindex].name;
+console.log(songs[musicindex]);
+}
+
+setMusic(i);
+
+prev.onclick= function bck(){
+    if(i>0){
+    i--;
+    }else{
+    i=songs.length;
+    }
+    setMusic(i).then(()=>{
+        setTimeout(()=>{
+            music_duration.innerHTML= Format_time(music.duration);
+         },500);
+    });
+}
+next.addEventListener('click',function ntx(){
+    if(i<=songs.length-1){
+        i++;
+    }
+    else{
+        i=0;
+    }
+    setMusic(i).then(()=>{
+        setTimeout(()=>{
+            music_duration.innerHTML= Format_time(music.duration);
+         },500);
+    });
+});
+
+
+
+music.addEventListener('ended',()=>{
+    next.click();
+});
+
+function Format_time(time){
+var minute=Math.floor(time/60);
+var second=Math.floor( time%60);
+if(minute<10){
+    minute= `0${minute}`;
+}
+
+if(second<10){
+    second=`0${second}`;
+}
+
+
+
+   time= `${minute}:${second}`;
+   return time;
+}
+
+
+
+
+}
